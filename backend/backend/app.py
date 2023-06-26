@@ -4,14 +4,15 @@ from flask_cors import CORS
 from fileinput import filename
 from werkzeug.utils import secure_filename
 
-UPLOAD_FOLDER = os.path.abspath(os.path.dirname(__file__)) + '/Downloads/'
+UPLOAD_FOLDER = os.path.abspath(os.path.dirname(__file__)) + '/'
+
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif',
                           'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'csv', 'zip', 'rar', 'mp4',
                           'mp3', 'wav', 'avi', 'mkv', 'flv', 'mov', 'wmv'])
 
-def allowedFile(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+# def allowedFile(filename):
+    # return '.' in filename and \
+    #        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONSs
 
 cors = CORS()
 
@@ -34,15 +35,19 @@ def get_time():
 def fileUpload():
     if request.method == 'POST':
         file = request.files.getlist('file')
+        name={"name":"Fiel"}
+        print(file)
         for f in file:
-            filename = secure_filename(f.filename)
-            if allowedFile(filename):
-                f.save(os.path.join(UPLOAD_FOLDER, filename))
-            else:
-                return jsonify({'message': 'File type not allowed'}), 400
-        return jsonify({"name": filename, "status": "success"})
-    else:
-        return jsonify({"status": "get request"})
+            print(f.filename)
+            filename = f.filename
+            # print(filename+"5")
+        #     if allowedFile(filename):
+        f.save(os.path.join(UPLOAD_FOLDER, filename))
+        #     else:
+        #         return jsonify({'message': 'File type not allowed'}), 400
+        return jsonify({"name": "Hi", "status": "success"})
+    # else:
+    #     return jsonify({"status": "gey "})
 
 # Running app
 if __name__ == '__main__':

@@ -1,0 +1,126 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+#define MAX_LINE 100
+#define MAX_LEN 1000
+
+struct stable {
+char lexeme[100];
+char type[100];
+};
+
+int count=0;
+
+char keyword[15][50] = { "int", 
+"float",
+"char", 
+"double", 
+"void", 
+"return", 
+"for", 
+"if",
+"else", 
+"while", 
+"do", 
+"struct", 
+"switch", 
+"case", 
+"default"
+};
+
+
+
+struct stable symboltable[250] = {};
+
+void add_symbol(char *token, char *type){
+    printf("%s",token);
+    int mila=0;
+    for (int i = 0; i < 250; i++){
+        if (strcmp(symboltable[i].lexeme, token) == 0){
+        mila=1;
+        }
+        // strcpy(symboltable[i].lexeme, "George Orwell");
+    }
+    printf("%d",mila);
+    // //if not found in symboltable
+    if(!mila){
+    strcpy(symboltable[count].lexeme,token);
+    strcpy(symboltable[count].type,type);
+    count++;
+    // printf("Success!!\n");
+    }
+   
+}
+
+
+
+int main()
+{
+    // //
+    // symboltable[0].lexeme="abc";
+    // symboltable[0].type="keyword";
+    for(int i=0;i<250;i++){
+        strcpy(symboltable[i].lexeme, "George Orwell");
+    }
+    
+    
+    char data[MAX_LINE][MAX_LEN]={'\0'};
+    int total_char=0;
+    FILE *file;
+    file=fopen("input.txt","r");
+    int lno=0;
+    
+    while( !feof(file) && !ferror(file) ){
+        if( fgets(data[lno],MAX_LEN,file)!=NULL ){
+            lno++;
+        }
+    }
+ 
+    fclose(file);
+    char str[100]="";
+
+    
+    
+    //Adding Data Line By Line 
+    int  line=0;
+    while(line!=lno){
+        int chars=0;
+        while(data[line][chars]!='\0'){
+            
+            if(data[line][chars]=='#'){
+                while( (isalpha(data[line][chars]) || data[line][chars]=='<' || data[line][chars]=='>' || data[line][chars]=='.' || data[line][chars]=='#') && data[line][chars]!='\0'){
+                    char c=data[line][chars];
+                    // printf("%s",str);
+                    strncat(str,&c,1);
+                    chars++;
+                }
+                // printf("%s\n",str);
+                // puts(str);
+                add_symbol(str,"preprocessor_directive");
+                strncpy(str,"",sizeof(str));
+            }
+            
+            
+            ////Adding Data To Symboltable_index
+            chars++;
+        }
+        line++;
+    }
+    // char str1[]="aa";
+    // char cga[]="ke";
+    // add_symbol(str1,cga);
+// //   for(int i=0;i<2;i++){
+//     printf("%s",symboltable[0].lexeme);
+//     printf("%s\n",symboltable[0].type);
+//     printf("%s",symboltable[1].lexeme);
+//     printf("%s\n",symboltable[1].type);
+//   }
+    // int y=token_in_stable("abcd");
+    // printf("%d",y);
+    
+    
+
+    return 0;
+}

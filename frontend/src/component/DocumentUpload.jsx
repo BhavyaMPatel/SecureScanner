@@ -1,8 +1,8 @@
-import React ,{useState} from 'react'
-import axios from 'axios'
+import React, { useState } from "react";
+import axios from "axios";
+import Loading from "./Loading";
 
-export default function DocumentUpload() {
-  
+function App() {
   const [, setfileURL] = useState("");
   const [selectedFile, setselectedFile] = useState(null);
   const [uploadedFile, setuploadedFile] = useState({});
@@ -12,6 +12,7 @@ export default function DocumentUpload() {
 
   let uploadInput = React.createRef();
 
+  // Track selected file before the upload
   const handleSelectFile = (e) => {
     const selectedFileList = [];
     for (let i = 0; i < e.target.files.length; i++) {
@@ -20,6 +21,7 @@ export default function DocumentUpload() {
     setselectedFile(selectedFileList);
   };
 
+  // Upload file to server
   const handleUploadFile = async (ev) => {
     ev.preventDefault();
 
@@ -44,7 +46,6 @@ export default function DocumentUpload() {
       );
       const body = response.data;
       console.log(body);
-      setfileURL(`http://127.0.0.1:5000/${body.filename}`);
       if (response.status === 200) {
         setisFileUploaded(true); // flag to show the uploaded file
         setisUploading(false);
@@ -56,16 +57,18 @@ export default function DocumentUpload() {
     }
   };
 
-
-
   return (
+
     <>
-    <form onSubmit={handleUploadFile} >
-      <label for="formFileLg" className="mb-2 inline-block text-3xl text-neutral-900 dark:text-neutral-500 font-thin">Drop Your File Here 🚀 </label>
-          <input ref={(ref) => { uploadInput = ref; }} onChange={handleSelectFile} className="bg-slate-100 mt-2 font-thin relative m-0 block w-full min-w-0 flex-auto cursor-pointer rounded border border-solid border-neutral-300  bg-clip-padding px-3 py-1.5 text-xl text-slate-800 outline-none transition duration-300 ease-in-out file:-mx-3 file:-my-1.5 file:cursor-pointer file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-1.5 file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[margin-inline-end:0.75rem] file:[border-inline-end-width:1px] hover:file:bg-neutral-200 focus:border-primary focus:bg-white focus:text-neutral-700 focus:shadow-[0_0_0_1px] focus:shadow-primary focus:outline-none dark:bg-transparent dark:text-neutral-500 dark:focus:bg-transparent" id="file" type="file"  name="file" multiple required/>
-          <button type='submit' className="mt-2 bg-slate-100 px-4 py-3 rounded-md font-thin text-2xl text-">Submit</button>
+    <form onSubmit={handleUploadFile}>
+    <label htmlFor="file" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white py-5  ">Upload multiple files</label>
+    <input className="p-3 w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file" type="file" multiple ref={(ref) => {uploadInput = ref;}} onChange={handleSelectFile} />
+    <button type="submit" className="text-white bg-pink-700 hover:bg-pink-800 focus:ring-4 focus:ring-pink-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-pink-600 dark:hover:bg-pink-700 focus:outline-none dark:focus:ring-pink-800">Submit</button>
+    {isFileUploaded && <Loading/>}
     </form>
+
     </>
-    )
+  );
 }
 
+export default App;
