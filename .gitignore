@@ -3,3 +3,4 @@ backend/backend/include
 backend/backend/Lib
 backend/backend/Scripts
 backend/backend/pyvenv.cfg
+backend/.gitigonre
