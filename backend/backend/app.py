@@ -1,5 +1,5 @@
 import os
-from flask import Flask,request,jsonify
+from flask import Flask,request,jsonify,send_from_directory
 from flask_cors import CORS
 from fileinput import filename
 from werkzeug.utils import secure_filename
@@ -48,6 +48,13 @@ def fileUpload():
         return jsonify({"name": "Hi", "status": "success"})
     # else:
     #     return jsonify({"status": "gey "})
+
+@app.route('/downloads',methods=['GET'])
+def tos():
+    workingdir = os.path.abspath(os.getcwd())
+    filepath = workingdir + '/'
+    return send_from_directory(filepath, '1.pdf')
+    # return 'h'
 
 # Running app
 if __name__ == '__main__':

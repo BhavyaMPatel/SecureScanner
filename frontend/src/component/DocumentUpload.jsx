@@ -9,7 +9,7 @@ function App() {
   const [isUploading, setisUploading] = useState(false);
   const [isFileUploaded, setisFileUploaded] = useState(false);
   const [uploadProgress, setuploadProgress] = useState(0);
-
+  const [DownLoad, setdownLoad] = useState(false);
   let uploadInput = React.createRef();
 
   // Track selected file before the upload
@@ -50,6 +50,7 @@ function App() {
         setisFileUploaded(true); // flag to show the uploaded file
         setisUploading(false);
         setuploadedFile(selectedFile); // set the uploaded file to show the name
+        setdownLoad(true);
       }
     } catch (error) {
       console.error(error);
@@ -61,9 +62,10 @@ function App() {
 
     <>
     <form onSubmit={handleUploadFile}>
-    <label htmlFor="file" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white py-5  ">Upload multiple files</label>
+    <label htmlFor="file" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white py-5">Upload multiple files</label>
+    {DownLoad && <a href="http://127.0.0.1:5000/downloads" className="text-white bg-pink-700 hover:bg-pink-800 focus:ring-4 focus:ring-pink-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-pink-600 dark:hover:bg-pink-700 focus:outline-none dark:focus:ring-pink-800">DownLoad Your PDF Now</a>}
     <input className="p-3 w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file" type="file" multiple ref={(ref) => {uploadInput = ref;}} onChange={handleSelectFile} />
-    <button type="submit" className="text-white bg-pink-700 hover:bg-pink-800 focus:ring-4 focus:ring-pink-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-pink-600 dark:hover:bg-pink-700 focus:outline-none dark:focus:ring-pink-800">Submit</button>
+    {!isFileUploaded && <button type="submit" className="text-white bg-pink-700 hover:bg-pink-800 focus:ring-4 focus:ring-pink-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-pink-600 dark:hover:bg-pink-700 focus:outline-none dark:focus:ring-pink-800">Submit</button>}
     {isFileUploaded && <Loading/>}
     </form>
 
@@ -72,3 +74,6 @@ function App() {
 }
 
 export default App;
+
+// How To Send To Another Page ? 
+// 
