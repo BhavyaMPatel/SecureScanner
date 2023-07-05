@@ -7,8 +7,8 @@ import spacy
 from PyPDF2 import PdfReader
 from fpdf import FPDF
 pdf = FPDF()
-pdf.add_font('DejaVu', '', 'D:/Kajana/BroadbandHack_Prototype/backend/backend/DejaVuSansCondensed.ttf', uni=True)
-pdf.set_font('DejaVu', '', 14)
+pdf.add_font('DejaVu','', 'D:/Kajana/BroadbandHack_Prototype/backend/backend/DejaVuSansCondensed.ttf', uni=True)
+pdf.set_font('DejaVu','', 14)
 nlp = spacy.load("en_core_web_sm")
 
 
@@ -69,7 +69,7 @@ def allow(Text):
 def mask_pii_data(filename):
     print("Funtion is running on")
     final_text =""
-    pdf_reader = PdfReader(f"{UPLOAD_FOLDER}/{filename}")
+    pdf_reader = PdfReader(f"{UPLOAD_FOLDER}/BhavyaMPatel_Resume.pdf")
     for page_num in range(len(pdf_reader.pages)):
         page = pdf_reader.pages[page_num] 
         page_text = page.extract_text()
@@ -78,8 +78,6 @@ def mask_pii_data(filename):
         page_text=page_text.replace(page_text,final_text)
     print(final_text)
     pdf.add_page()
-    pdf.set_font('Arial', '', 14)
-    pdf.ln(10)
     pdf.write(8, final_text)
     pdf.output(f"{FILE_FOLDER}/{filename}")
 

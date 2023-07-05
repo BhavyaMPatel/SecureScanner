@@ -57,8 +57,11 @@ function App() {
     }
   };
 
+ 
+
   function AfterDownload(){
     const element=document.getElementById('room')
+
     console.log(element)
     setTimeout(function(){
     element.close();
