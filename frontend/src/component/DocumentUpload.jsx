@@ -53,10 +53,20 @@ function App() {
       }
     } catch (error) {
       console.error(error);
+      
       setisUploading(false);
     }
   };
-
+  
+  async function Download(){
+    let filename=document.getElementById("file").value
+    filename=filename.replace(/^.*\\/, "");
+    console.log(filename);
+    const URL=`http://localhost:5000/downloads/${filename}`
+    console.log(URL);
+    let URL_Id=document.getElementById("URL_LINK");
+    URL_Id.href=URL;
+  }
  
 
   function AfterDownload(){
@@ -73,7 +83,7 @@ function App() {
     <>
     <form onSubmit={handleUploadFile}>
     <label htmlFor="file" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white py-5">Upload multiple files</label>
-    {DownLoad && <a href="https://127.0.0.1:5000/downloads/" onClick={AfterDownload} className="text-white bg-pink-700 hover:bg-pink-800 focus:ring-4 focus:ring-pink-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-pink-600 dark:hover:bg-pink-700 focus:outline-none dark:focus:ring-pink-800">DownLoad Your PDF Now</a>}
+    {DownLoad && <a id="URL_LINK" href="#" onClick={()=>{Download()}} className="text-white bg-pink-700 hover:bg-pink-800 focus:ring-4 focus:ring-pink-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-pink-600 dark:hover:bg-pink-700 focus:outline-none dark:focus:ring-pink-800">DownLoad Your PDF Now</a>}
     <input className="p-3 w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file" multiple type="file" ref={(ref) => {uploadInput = ref;}} onChange={handleSelectFile} />
     {!isFileUploaded && <button type="submit" className="text-white bg-pink-700 hover:bg-pink-800 focus:ring-4 focus:ring-pink-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-pink-600 dark:hover:bg-pink-700 focus:outline-none dark:focus:ring-pink-800">Submit</button>}
     {isUploading && <Loading/>}

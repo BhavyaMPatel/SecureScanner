@@ -18,7 +18,7 @@ FILE_FOLDER = os.path.abspath(os.path.dirname(__file__)) + '/files'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif',
                           'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'csv', 'zip', 'rar', 'mp4',
                           'mp3', 'wav', 'avi', 'mkv', 'flv', 'mov', 'wmv'])
-
+#File Allowed Or Not
 # def allowedFile(filename):
     # return '.' in filename and \
     #        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONSs
@@ -37,6 +37,7 @@ def get_time():
         res={"Hackathon":"Broadbridge"}
         return jsonify(res)
       
+
 @app.route('/upload', methods=['POST', 'GET'])
 def fileUpload():
     if request.method == 'POST':
@@ -46,30 +47,24 @@ def fileUpload():
         print(file)
         filename=""
         for f in file:
-            print(f.filename)
             filename = f.filename
             f.save(os.path.join(UPLOAD_FOLDER, filename))
-        print("Helpp")
-        print(filename)
         mask_pii_data(filename)
         return jsonify({"name": "Hi", "status": "success"})
     else:
         return jsonify({"status": "Server Ignored"})
     
+
 @app.route('/downloads/<FileName>',methods=['GET'])
 def tos(FileName):
     workingdir = os.path.abspath(os.getcwd())
     filepath = workingdir + '/files'
     return send_from_directory(filepath, f'{FileName}')
 
-@app.route('/allow/<Text>')
-def allow(Text):
-    return f'You have been allowed to enter because your text is {Text}'
 
 def mask_pii_data(filename):
-    print("Funtion is running on")
     final_text =""
-    pdf_reader = PdfReader(f"{UPLOAD_FOLDER}/BhavyaMPatel_Resume.pdf")
+    pdf_reader = PdfReader(f"{UPLOAD_FOLDER}/{filename}")
     for page_num in range(len(pdf_reader.pages)):
         page = pdf_reader.pages[page_num] 
         page_text = page.extract_text()
@@ -78,10 +73,9 @@ def mask_pii_data(filename):
         page_text=page_text.replace(page_text,final_text)
     print(final_text)
     pdf.add_page()
-    pdf.write(8, final_text)
+    pdf.write(8,final_text)
     pdf.output(f"{FILE_FOLDER}/{filename}")
 
 
-# Running app
 if __name__ == '__main__':
     app.run(debug=True)
